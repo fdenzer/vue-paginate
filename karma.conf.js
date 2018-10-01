@@ -35,7 +35,10 @@ module.exports = function(config) {
     browserify: {
       debug: true,
       transform: [
-      ['babelify', {plugins: ['babel-plugin-espower']}]
+      [
+        'babelify', 
+        //{plugins: ['babel-plugin-espower']},
+      ]
       ]
     },
     
