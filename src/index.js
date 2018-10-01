@@ -1,7 +1,7 @@
-import Paginate from './components/Paginate'
-import PaginateLinks from './components/PaginateLinks'
-import paginateDataGenerator from './util/paginateDataGenerator'
-import { warn } from './util/debug'
+import Paginate from './components/Paginate.js'
+import PaginateLinks from './components/PaginateLinks.js'
+import paginateDataGenerator from './util/paginateDataGenerator.js'
+import { warn } from './util/debug.js'
 
 const vuePaginate = {}
 

@@ -1,29 +1,29 @@
-import { warn } from '../util/debug'
+import { warn } from '../util/debug.js'
 
 export default {
-  name: 'paginate',
-  props: {
-    name: {
-      type: String,
+  name    : 'paginate',
+  props   : {
+    name     : {
+      type    : String,
       required: true
     },
-    list: {
-      type: Array,
+    list     : {
+      type    : Array,
       required: true
     },
-    per: {
-      type: Number,
+    per      : {
+      type   : Number,
       default: 3,
       validator (value) {
         return value > 0
       }
     },
-    tag: {
-      type: String,
+    tag      : {
+      type   : String,
       default: 'ul'
     },
     container: {
-      type: Object,
+      type   : Object,
       default: null
     }
   },
@@ -48,8 +48,8 @@ export default {
     },
     pageItemsCount () {
       const numOfItems = this.list.length
-      const first = this.currentPage * this.per + 1
-      const last = Math.min((this.currentPage * this.per) + this.per, numOfItems)
+      const first      = this.currentPage * this.per + 1
+      const last       = Math.min((this.currentPage * this.per) + this.per, numOfItems)
       return `${first}-${last} of ${numOfItems}`
     },
 
@@ -67,7 +67,7 @@ export default {
     }
     this.paginateList()
   },
-  watch: {
+  watch   : {
     currentPage () {
       this.paginateList()
     },
@@ -82,10 +82,10 @@ export default {
       this.paginateList()
     }
   },
-  methods: {
+  methods : {
     paginateList () {
-      const index = this.currentPage * this.per
-      const paginatedList = this.list.slice(index, index + this.per)
+      const index                          = this.currentPage * this.per
+      const paginatedList                  = this.list.slice(index, index + this.per)
       this.parent.paginate[this.name].list = paginatedList
     },
     goToPage (page) {

@@ -1,27 +1,27 @@
-import LimitedLinksGenerator from '../util/LimitedLinksGenerator'
-import { LEFT_ARROW, RIGHT_ARROW, ELLIPSES } from '../config/linkTypes'
-import { warn } from '../util/debug'
+import LimitedLinksGenerator from '../util/LimitedLinksGenerator.js'
+import { ELLIPSES, LEFT_ARROW, RIGHT_ARROW } from '../config/linkTypes.js'
+import { warn } from '../util/debug.js'
 
 export default {
-  name: 'paginate-links',
-  props: {
-    for: {
-      type: String,
+  name    : 'paginate-links',
+  props   : {
+    for           : {
+      type    : String,
       required: true
     },
-    limit: {
-      type: Number,
+    limit         : {
+      type   : Number,
       default: 0
     },
-    simple: {
-      type: Object,
+    simple        : {
+      type   : Object,
       default: null,
       validator (obj) {
         return obj.prev && obj.next
       }
     },
-    stepLinks: {
-      type: Object,
+    stepLinks     : {
+      type   : Object,
       default: () => {
         return {
           prev: LEFT_ARROW,
@@ -32,30 +32,30 @@ export default {
         return obj.prev && obj.next
       }
     },
-    showStepLinks: {
+    showStepLinks : {
       type: Boolean
     },
     hideSinglePage: {
       type: Boolean
     },
-    classes: {
-      type: Object,
+    classes       : {
+      type   : Object,
       default: null
     },
-    async: {
-      type: Boolean,
+    async         : {
+      type   : Boolean,
       default: false
     },
-    container: {
-      type: Object,
+    container     : {
+      type   : Object,
       default: null
     }
   },
   data () {
     return {
-      listOfPages: [],
+      listOfPages  : [],
       numberOfPages: 0,
-      target: null
+      target       : null
     }
   },
   computed: {
@@ -96,7 +96,7 @@ export default {
       this.updateListOfPages()
     })
   },
-  watch: {
+  watch   : {
     'state': {
       handler () {
         this.updateListOfPages()
@@ -107,7 +107,7 @@ export default {
       this.$emit('change', toPage + 1, fromPage + 1)
     }
   },
-  methods: {
+  methods : {
     updateListOfPages () {
       this.target = getTargetPaginateComponent(this.parent.$children, this.for)
       if (!this.target) {
@@ -117,7 +117,7 @@ export default {
         return
       }
       this.numberOfPages = Math.ceil(this.target.list.length / this.target.per)
-      this.listOfPages = getListOfPageNumbers(this.numberOfPages)
+      this.listOfPages   = getListOfPageNumbers(this.numberOfPages)
     }
   },
   render (h) {
@@ -126,8 +126,8 @@ export default {
     let links = this.simple
       ? getSimpleLinks(this, h)
       : this.limit > 1
-      ? getLimitedLinks(this, h)
-      : getFullLinks(this, h)
+        ? getLimitedLinks(this, h)
+        : getFullLinks(this, h)
 
     if (this.hideSinglePage && this.numberOfPages <= 1) {
       return null
@@ -151,7 +151,7 @@ function getFullLinks (vm, h) {
     ? [vm.stepLinks.prev, ...vm.listOfPages, vm.stepLinks.next]
     : vm.listOfPages
   return allLinks.map(link => {
-    const data = {
+    const data      = {
       on: {
         click: (e) => {
           e.preventDefault()
@@ -171,10 +171,10 @@ function getFullLinks (vm, h) {
       vm.listOfPages.length - 1,
       vm.stepLinks
     )
-    const linkText = link === vm.stepLinks.next || link === vm.stepLinks.prev
+    const linkText  = link === vm.stepLinks.next || link === vm.stepLinks.prev
       ? link
       : link + 1 // it means it's a number
-    return h('li', { class: liClasses }, [h('a', data, linkText)])
+    return h('li', {class: liClasses}, [h('a', data, linkText)])
   })
 }
 
@@ -193,7 +193,7 @@ function getLimitedLinks (vm, h) {
   const limitedLinksMetadata = getLimitedLinksMetadata(limitedLinks)
 
   return limitedLinks.map((link, index) => {
-    const data = {
+    const data      = {
       on: {
         click: (e) => {
           e.preventDefault()
@@ -218,13 +218,13 @@ function getLimitedLinks (vm, h) {
     // then incremented by 1 (since it's 0 based).
     // otherwise, do nothing (so, it's a symbol).
     const text = (link === parseInt(link, 10)) ? link + 1 : link
-    return h('li', { class: liClasses }, [h('a', data, text)])
+    return h('li', {class: liClasses}, [h('a', data, text)])
   })
 }
 
 function getSimpleLinks (vm, h) {
-  const lastPage = vm.listOfPages.length - 1
-  const prevData = {
+  const lastPage     = vm.listOfPages.length - 1
+  const prevData     = {
     on: {
       click: (e) => {
         e.preventDefault()
@@ -232,7 +232,7 @@ function getSimpleLinks (vm, h) {
       }
     }
   }
-  const nextData = {
+  const nextData     = {
     on: {
       click: (e) => {
         e.preventDefault()
@@ -240,10 +240,10 @@ function getSimpleLinks (vm, h) {
       }
     }
   }
-  const nextListData = { class: ['next', vm.currentPage >= lastPage ? 'disabled' : ''] }
-  const prevListData = { class: ['prev', vm.currentPage <= 0 ? 'disabled' : ''] }
-  const prevLink = h('li', prevListData, [h('a', prevData, vm.simple.prev)])
-  const nextLink = h('li', nextListData, [h('a', nextData, vm.simple.next)])
+  const nextListData = {class: ['next', vm.currentPage >= lastPage ? 'disabled' : '']}
+  const prevListData = {class: ['prev', vm.currentPage <= 0 ? 'disabled' : '']}
+  const prevLink     = h('li', prevListData, [h('a', prevData, vm.simple.prev)])
+  const nextLink     = h('li', nextListData, [h('a', nextData, vm.simple.next)])
   return [prevLink, nextLink]
 }
 
@@ -257,11 +257,11 @@ function getListOfPageNumbers (numberOfPages) {
   // converts number of pages into an array
   // that contains each individual page number
   // For Example: 4 => [0, 1, 2, 3]
-  return Array.apply(null, { length: numberOfPages })
+  return Array.apply(null, {length: numberOfPages})
     .map((val, index) => index)
 }
 
-function getClassesForLink(link, currentPage, lastPage, { prev, next }) {
+function getClassesForLink (link, currentPage, lastPage, {prev, next}) {
   let liClass = []
   if (link === prev) {
     liClass.push('left-arrow')
@@ -285,7 +285,7 @@ function getClassesForLink(link, currentPage, lastPage, { prev, next }) {
   return liClass
 }
 
-function getTargetPageForLink (link, limit, currentPage, listOfPages, { prev, next }, metaData = null) {
+function getTargetPageForLink (link, limit, currentPage, listOfPages, {prev, next}, metaData = null) {
   let currentChunk = Math.floor(currentPage / limit)
   if (link === prev) {
     return (currentPage - 1) < 0 ? 0 : currentPage - 1
@@ -297,7 +297,7 @@ function getTargetPageForLink (link, limit, currentPage, listOfPages, { prev, ne
     return (currentChunk + 1) * limit
   } else if (metaData && metaData === 'left-ellipses') {
     const chunkContent = listOfPages.slice(currentChunk * limit, currentChunk * limit + limit)
-    const isLastPage = currentPage === listOfPages.length - 1
+    const isLastPage   = currentPage === listOfPages.length - 1
     if (isLastPage && chunkContent.length === 1) {
       currentChunk--
     }
